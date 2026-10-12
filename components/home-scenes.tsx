@@ -6,6 +6,7 @@ import { categories, products } from "@/lib/catalogue";
 import { useQuote } from "./quote-context";
 export function Hero() {
   const ref = useRef<HTMLElement>(null);
+  const [world, setWorld] = useState<"laboratory" | "hygiene">("laboratory");
   useEffect(() => {
     if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     let frame = 0;
@@ -14,69 +15,173 @@ export function Hero() {
       frame = requestAnimationFrame(() => {
         if (ref.current) {
           const p = Math.min(1, Math.max(0, window.scrollY / 700));
-          ref.current.style.setProperty("--progress", String(p));
+          ref.current.style.setProperty("--hero-progress", String(p));
         }
       });
     };
+    scroll();
     window.addEventListener("scroll", scroll, { passive: true });
     return () => {
       window.removeEventListener("scroll", scroll);
       cancelAnimationFrame(frame);
     };
   }, []);
+  const lab = world === "laboratory";
   return (
-    <section className="hero" ref={ref}>
-      <div className="hero-heading wrap">
-        <p className="eyebrow">
-          <span className="tiny-dot" />
-          Scientific supplies &amp; hygiene solutions
-        </p>
-        <h1>
-          Precision for the lab.
-          <br />
-          <span>Confidence in every space.</span>
-        </h1>
-      </div>
-      <div className="hero-visual">
-        <img
-          src="/images/glassware.webp"
-          alt="Illustrative studio composition of laboratory glassware with violet liquid"
-          width="1536"
-          height="1024"
-          fetchPriority="high"
-        />
-        <div className="hero-copy">
-          <p>
-            From laboratory equipment and reagents to detergents, disinfectants
-            and professional cleaning services. The solutions your business
-            needs, brought together.
+    <section className="hero-compose" ref={ref} aria-labelledby="hero-title">
+      <svg
+        className="hero-clip-definitions"
+        aria-hidden="true"
+        width="0"
+        height="0"
+      >
+        <defs>
+          <clipPath id="science-aperture" clipPathUnits="objectBoundingBox">
+            <path d="M .20 0 H .96 Q 1 0 1 .05 V .75 Q 1 .79 .96 .79 H .86 Q .81 .79 .81 .84 V .95 Q .81 1 .76 1 H .04 Q 0 1 0 .95 V .23 Q 0 .18 .05 .18 H .15 Q .20 .18 .20 .13 Z" />
+          </clipPath>
+          <clipPath id="workplace-aperture" clipPathUnits="objectBoundingBox">
+            <path d="M .03 0 H .77 Q .83 0 .87 .1 L .97 .37 Q 1 .43 1 .53 V .93 Q 1 1 .96 1 H .04 Q 0 1 0 .93 V .08 Q 0 0 .03 0 Z" />
+          </clipPath>
+        </defs>
+      </svg>
+      <div className="hero-editorial wrap">
+        <div className="hero-statement">
+          <p className="eyebrow">
+            <span className="tiny-dot" />
+            Precision meets protection
           </p>
-          <div className="actions">
+          <h1 id="hero-title">
+            Precision <br />
+            for the lab.
+            <br />
+            <span>
+              Confidence in <br />
+              every space.
+            </span>
+          </h1>
+          <p className="hero-summary">
+            Laboratory equipment and reagents. Detergents and disinfectants.
+            Professional care for your spaces.
+          </p>
+          <div className="hero-action-pair">
             <Link className="button" href="/products">
               Explore products <ArrowUpRight size={18} />
             </Link>
             <Link className="text-link" href="/request-quote">
-              Request a quote <ArrowRight size={18} />
+              Request a quote <ArrowRight size={17} />
             </Link>
           </div>
         </div>
-        <span className="specimen-label">
-          01 / PRECISION
+        <div className="hero-subject">
+          <div
+            className="hero-mode-controls"
+            aria-label="Choose your environment"
+          >
+            <button onClick={() => setWorld("laboratory")} aria-pressed={lab}>
+              The laboratory
+            </button>
+            <button onClick={() => setWorld("hygiene")} aria-pressed={!lab}>
+              Everyday hygiene
+            </button>
+          </div>
+          <div className="hero-aperture">
+            <img
+              className={lab ? "is-active" : ""}
+              src="/images/glassware.webp"
+              alt="Illustrative laboratory glassware with translucent violet liquid"
+              aria-hidden={!lab}
+              width="1536"
+              height="1024"
+              fetchPriority="high"
+            />
+            <img
+              className={!lab ? "is-active" : ""}
+              src="/images/hygiene.jpg"
+              alt="Representative professional surface cleaning with protective gloves"
+              aria-hidden={lab}
+              width="1400"
+              height="933"
+              loading="lazy"
+            />
+            <div className="hero-aperture-marker" aria-hidden="true">
+              <span>PS / SCIENCE &amp; CARE</span>
+              <div>
+                {Array.from({ length: 11 }, (_, i) => (
+                  <i key={i} />
+                ))}
+              </div>
+            </div>
+            <span className="hero-image-note">
+              ILLUSTRATIVE CATEGORY IMAGERY
+            </span>
+          </div>
+          <div className="hero-subject-caption" aria-live="polite">
+            <span className="hero-scene-number">{lab ? "01" : "02"}</span>
+            <p>
+              {lab ? "Scientific" : "Professional"}
+              <br />
+              {lab ? "precision." : "hygiene."}
+            </p>
+          </div>
+          <Link
+            className="hero-subject-destination"
+            href={
+              lab
+                ? "/products/category/laboratory-equipment"
+                : "/products/category/disinfectants"
+            }
+          >
+            <span>
+              {lab ? "Explore laboratory supplies" : "Explore hygiene products"}
+            </span>
+            <ArrowUpRight size={18} />
+          </Link>
+        </div>
+        <Link className="hero-workplace" href="/services">
+          <div className="hero-workplace-image">
+            <img
+              src="/images/workplace.jpg"
+              alt="Representative bright commercial workplace"
+              width="1600"
+              height="1100"
+            />
+            <span className="hero-workplace-shade" />
+          </div>
+          <div className="hero-workplace-copy">
+            <span className="eyebrow">Beyond the laboratory</span>
+            <h2>
+              Care for the spaces
+              <br />
+              that matter.
+            </h2>
+            <span className="hero-service-link">
+              Cleaning &amp; disinfection <ArrowUpRight size={16} />
+            </span>
+          </div>
+          <span className="hero-workplace-label">ILLUSTRATIVE ENVIRONMENT</span>
+        </Link>
+      </div>
+      <div className="hero-category-line wrap">
+        <p>
+          Scientific supplies.
           <br />
-          <small>Illustrative glassware composition</small>
-        </span>
-        <div className="measurement" aria-hidden="true">
-          {Array.from({ length: 17 }, (_, i) => (
-            <i key={i} />
+          <span>Professional hygiene solutions.</span>
+        </p>
+        <div>
+          {categories.map((c) => (
+            <Link href={"/products/category/" + c.slug} key={c.slug}>
+              {c.short}
+              <ArrowUpRight size={13} />
+            </Link>
           ))}
         </div>
-      </div>
-      <div className="hero-bottom wrap">
-        <span>One partner. Two connected worlds.</span>
-        <a href="#expertise">
-          Discover the possibilities <ArrowDown size={16} />
+        <a
+          className="hero-discover"
+          href="#expertise"
+          aria-label="Discover Purple Sense expertise"
+        >
+          <ArrowDown size={18} />
         </a>
-        <span className="hero-index">SCROLL TO EXPLORE / 01</span>
       </div>
     </section>
   );
