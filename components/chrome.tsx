@@ -87,7 +87,7 @@ export function Header() {
           <Link
             href="/request-quote"
             className="basket"
-            aria-label={`Quote basket, ${items.length} items`}
+            aria-label={`Quote basket, ${items.length} ${items.length === 1 ? "item" : "items"}`}
           >
             <ClipboardList size={19} />
             <span>{items.length}</span>

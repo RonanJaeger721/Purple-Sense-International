@@ -129,14 +129,12 @@ export function QuoteBuilder() {
     setEmailResult("");
     setTimeout(() => {
       heading.current?.focus();
-      document
-        .querySelector(".quote-shell")
-        ?.scrollIntoView({
-          behavior: matchMedia("(prefers-reduced-motion: reduce)").matches
-            ? "instant"
-            : "smooth",
-          block: "start",
-        });
+      document.querySelector(".quote-shell")?.scrollIntoView({
+        behavior: matchMedia("(prefers-reduced-motion: reduce)").matches
+          ? "instant"
+          : "smooth",
+        block: "start",
+      });
     }, 0);
   };
   const services = data.kind !== "Product quotation";
@@ -759,7 +757,10 @@ export function QuoteBuilder() {
             {[
               [
                 "Requirements",
-                data.kind + (productMode ? ` / ${items.length} items` : ""),
+                data.kind +
+                  (productMode
+                    ? ` / ${items.length} ${items.length === 1 ? "item" : "items"}`
+                    : ""),
                 0,
               ],
               [

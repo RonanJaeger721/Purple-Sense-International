@@ -18,4 +18,10 @@
 
 Actual Resend delivery and database persistence are not verified because no receiving email, API key or database has been supplied. No domain or mailbox has been provisioned. Representative catalogue content needs replacement with client inventory. Advertising/analytics trackers are not active. No claim of measured Core Web Vitals or independent award endorsement is made.
 
-Public deployment checks are recorded in the handoff after the preview is created.
+## Public deployment checks
+
+The isolated public demo at https://purple-sense-international-rosy.vercel.app passed the same 20-route, 37-destination and 23-resource HTTP checks. The deployed browser flow passed product-detail selection, basket transfer, quantity/specification review, location/contact validation and the final WhatsApp composer link; no message was sent. The deployed console was clear. Email and database remained disabled, with truthful 503 responses.
+
+Vercel assigned the first deployment to its default production environment automatically. A separate preview deployment was then created. No custom domain was registered, connected or changed, and no other client project was modified. The preview retains Vercel authentication; it was checked with the authenticated CLI. A connector share-link request returned a scope-related 403, so the permanent, publicly accessible demo alias is used for handoff.
+
+The first deployment’s protected build hostname was discovered in its metadata. Site URL selection was corrected to prefer the project’s public production URL in production, while retaining the unique deployment hostname for authenticated previews. `NEXT_PUBLIC_SITE_URL` remains the override for an approved custom domain.
